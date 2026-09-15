@@ -1,0 +1,9 @@
+{
+  "requiredEvidenceTypes": ["requirement", "fixed-defect", "deployment-note"],
+  "requiredRiskCategories": ["accessibility", "compatibility", "deployment", "regression"],
+  "minimumRequirementCount": 3,
+  "minimumScenarioCount": 3,
+  "allDerivedRecordsRequireSourceIdentity": true,
+  "scenarioAssertionKind": "inference",
+  "requirementAssertionKind": "documented-fact"
+}

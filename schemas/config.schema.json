@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iulianaschmidt/ui-testing-strategy-agent/schemas/config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tenantId", "clientId", "sourceFolderUrl", "destinationSiteUrl"],
+  "properties": {
+    "tenantId": { "type": "string", "minLength": 1 },
+    "clientId": { "type": "string", "format": "uuid" },
+    "sourceFolderUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "destinationSiteUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "maxFileBytes": { "type": "integer", "minimum": 1 },
+    "storeExcerpts": { "type": "boolean" }
+  }
+}
