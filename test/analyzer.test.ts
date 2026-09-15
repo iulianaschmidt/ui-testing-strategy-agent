@@ -87,4 +87,24 @@ describe("analyzeEvidence", () => {
       expect.objectContaining({ sourceItemId: failed.sourceItemId }),
     ]);
   });
+
+  it("keeps distinct long requirements that share the same prefix", () => {
+    const sharedPrefix = `The onboarding form must ${"preserve this shared behavior ".repeat(25)}`;
+    const evidence = {
+      ...sourceEvidence,
+      text: `${sharedPrefix}for billing accounts.\n${sharedPrefix}for shipping accounts.`,
+    };
+
+    const result = analyzeEvidence(
+      [evidence],
+      "c39331f4-2c92-4b92-9848-72988927d2aa",
+      "scope-1",
+      taxonomy,
+      riskRules,
+      false,
+    );
+
+    expect(result.records.filter((record) => record.kind === "requirement")).toHaveLength(2);
+    expect(result.records.filter((record) => record.kind === "test-scenario")).toHaveLength(2);
+  });
 });

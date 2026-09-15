@@ -278,6 +278,7 @@ function parseSchemaOperation(value: Record<string, unknown>): SchemaOperation {
     return {
       operation: "create-column",
       listName: value.listName,
+      ...(typeof value.listId === "string" ? { listId: value.listId } : {}),
       column: value.column as ColumnDefinition,
     };
   }

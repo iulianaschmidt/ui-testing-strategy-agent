@@ -4,7 +4,12 @@ import type { GraphColumn, GraphList } from "./types.js";
 
 export type SchemaOperation =
   | { operation: "create-list"; listName: string }
-  | { operation: "create-column"; listName: string; column: ColumnDefinition };
+  | {
+      operation: "create-column";
+      listName: string;
+      listId?: string;
+      column: ColumnDefinition;
+    };
 
 export interface SchemaManager {
   preview(manifests: readonly ListManifest[]): Promise<SchemaOperation[]>;
@@ -49,6 +54,7 @@ export class SharePointSchemaManager implements SchemaManager {
           operations.push({
             operation: "create-column",
             listName: manifest.displayName,
+            listId: matches[0]!.id,
             column,
           });
           continue;
@@ -75,10 +81,16 @@ export class SharePointSchemaManager implements SchemaManager {
       error?: string;
     }> = [];
     const listIds = await this.getListIds();
+    const createdListIds = new Map<string, string>();
 
     for (const operation of operations) {
       try {
         if (operation.operation === "create-list") {
+          if ((listIds.get(operation.listName) ?? []).length > 0) {
+            throw new Error(
+              `Destination changed after preview: list "${operation.listName}" now exists`,
+            );
+          }
           const created = await this.client.request<GraphList>(
             `/sites/${encodeURIComponent(this.siteId)}/lists`,
             {
@@ -89,12 +101,17 @@ export class SharePointSchemaManager implements SchemaManager {
               },
             },
           );
-          listIds.set(operation.listName, created.id);
+          listIds.set(operation.listName, [created.id]);
+          createdListIds.set(operation.listName, created.id);
         } else {
-          const listId = listIds.get(operation.listName);
-          if (!listId) {
-            throw new Error(`List "${operation.listName}" is unavailable for column creation`);
-          }
+          const matches = listIds.get(operation.listName) ?? [];
+          const listId = operation.listId
+            ? this.requireApprovedList(operation.listName, operation.listId, matches)
+            : createdListIds.get(operation.listName);
+          if (!listId)
+            throw new Error(
+              `List "${operation.listName}" was not created by this approved schema plan`,
+            );
           await this.client.request<GraphColumn>(
             `/sites/${encodeURIComponent(this.siteId)}/lists/${encodeURIComponent(listId)}/columns`,
             { method: "POST", body: operation.column },
@@ -112,11 +129,24 @@ export class SharePointSchemaManager implements SchemaManager {
     return outcomes;
   }
 
-  private async getListIds(): Promise<Map<string, string>> {
+  private async getListIds(): Promise<Map<string, string[]>> {
     const lists = await this.client.collect<GraphList>(
       `/sites/${encodeURIComponent(this.siteId)}/lists?$select=id,displayName`,
     );
-    return new Map(lists.map((list) => [list.displayName, list.id]));
+    const ids = new Map<string, string[]>();
+    for (const list of lists) {
+      ids.set(list.displayName, [...(ids.get(list.displayName) ?? []), list.id]);
+    }
+    return ids;
+  }
+
+  private requireApprovedList(listName: string, approvedListId: string, matches: string[]): string {
+    if (matches.length !== 1 || matches[0] !== approvedListId) {
+      throw new Error(
+        `Destination changed after preview: list "${listName}" no longer resolves uniquely to the approved list`,
+      );
+    }
+    return approvedListId;
   }
 
   private columns(listId: string): Promise<GraphColumn[]> {

@@ -220,8 +220,7 @@ function normalizeDiscriminator(value: string): string {
   return value
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, " ")
-    .trim()
-    .slice(0, 500);
+    .trim();
 }
 
 function shorten(value: string, length: number): string {
