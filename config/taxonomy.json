@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "evidenceTypes": [
+    "requirement",
+    "code",
+    "design-note",
+    "fixed-defect",
+    "deployment-note",
+    "mixed",
+    "unclassified"
+  ],
+  "riskCategories": [
+    "accessibility",
+    "compatibility",
+    "data-integrity",
+    "deployment",
+    "performance",
+    "regression",
+    "security",
+    "usability",
+    "unknown"
+  ],
+  "confidence": {
+    "high": 0.8,
+    "medium": 0.55,
+    "reviewBelow": 0.55
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "ui-testing-strategy-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A GitHub Copilot custom agent and MCP service for traceable SharePoint UI test strategy analysis.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "mcp": "node dist/mcp/main.js",
+    "mcp:dev": "tsx src/mcp/main.ts",
+    "schema:provision": "tsx src/cli/provision-schema.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@azure/msal-node": "6.0.0",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "officeparser": "7.8.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@types/node": "^24.3.1",
+    "eslint": "^9.35.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0",
+    "vitest": "^3.2.4"
+  }
+}

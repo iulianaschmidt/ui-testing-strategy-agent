@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iulianaschmidt/ui-testing-strategy-agent/schemas/derived-record.schema.json",
+  "type": "object",
+  "required": [
+    "key",
+    "sourceScopeKey",
+    "kind",
+    "title",
+    "SourceLink",
+    "SourceDriveId",
+    "SourceItemId",
+    "sourceStatus",
+    "analysisRunId",
+    "classification",
+    "confidence",
+    "reviewRequired",
+    "provenance",
+    "details",
+    "rulesVersion"
+  ],
+  "properties": {
+    "key": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "sourceScopeKey": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "kind": {
+      "enum": ["evidence-index", "requirement", "risk", "test-scenario", "analysis-run"]
+    },
+    "title": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "SourceLink": { "type": "string", "format": "uri" },
+    "SourceDriveId": { "type": "string", "minLength": 1 },
+    "SourceItemId": { "type": "string", "minLength": 1 },
+    "sourceStatus": {
+      "enum": ["available", "unavailable", "unsupported", "oversized", "failed"]
+    },
+    "analysisRunId": { "type": "string", "format": "uuid" },
+    "classification": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "reviewRequired": { "type": "boolean" },
+    "conflicts": { "type": "array", "items": { "type": "string" } },
+    "provenance": {
+      "type": "object",
+      "required": ["assertionKind", "rationale"],
+      "properties": {
+        "assertionKind": { "enum": ["documented-fact", "inference"] },
+        "excerpt": { "type": "string", "maxLength": 1000 },
+        "rationale": { "type": "string" }
+      }
+    },
+    "details": { "type": "object" },
+    "contentHash": { "type": "string" },
+    "rulesVersion": { "type": "string" }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "ui-evidence": {
+      "type": "stdio",
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "tools": ["*"]
+    }
+  }
+}

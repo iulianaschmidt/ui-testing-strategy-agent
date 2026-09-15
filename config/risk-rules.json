@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "fixed-defect-regression",
+      "terms": ["fixed", "resolved", "defect", "bug"],
+      "category": "regression",
+      "severity": "medium",
+      "title": "Regression risk around a documented fixed defect"
+    },
+    {
+      "id": "deployment-change",
+      "terms": ["deploy", "release", "feature flag", "configuration"],
+      "category": "deployment",
+      "severity": "medium",
+      "title": "Deployment or configuration change requires validation"
+    },
+    {
+      "id": "accessibility-language",
+      "terms": ["accessibility", "keyboard", "screen reader", "aria", "wcag"],
+      "category": "accessibility",
+      "severity": "high",
+      "title": "Accessibility behavior requires explicit coverage"
+    },
+    {
+      "id": "browser-device-language",
+      "terms": ["browser", "mobile", "responsive", "viewport", "device"],
+      "category": "compatibility",
+      "severity": "medium",
+      "title": "Cross-browser or responsive behavior requires coverage"
+    },
+    {
+      "id": "security-language",
+      "terms": ["authorization", "authentication", "permission", "role", "sensitive"],
+      "category": "security",
+      "severity": "high",
+      "title": "Access-control behavior requires negative testing"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iulianaschmidt/ui-testing-strategy-agent/schemas/sharepoint-lists.schema.json",
+  "title": "UI evidence SharePoint list contract",
+  "type": "object",
+  "required": ["version", "lists", "requiredCommonColumns", "indexes"],
+  "properties": {
+    "version": { "const": "1.0.0" },
+    "lists": {
+      "const": [
+        "UI Evidence Index",
+        "Requirements and Risks",
+        "Test Scenario Backlog",
+        "Analysis Runs"
+      ]
+    },
+    "requiredCommonColumns": {
+      "const": [
+        "Title",
+        "StableKey",
+        "SourceScopeKey",
+        "SourceLink",
+        "SourceDriveId",
+        "SourceItemId",
+        "SourceStatus",
+        "AnalysisRunId",
+        "Classification",
+        "Confidence",
+        "ReviewRequired",
+        "AssertionKind",
+        "ContentHash",
+        "RulesVersion",
+        "DetailsJson",
+        "ConflictsJson",
+        "Rationale",
+        "EvidenceExcerpt"
+      ]
+    },
+    "indexes": {
+      "const": {
+        "StableKey": { "indexed": true, "unique": true },
+        "SourceScopeKey": { "indexed": true, "unique": false }
+      }
+    }
+  }
+}
